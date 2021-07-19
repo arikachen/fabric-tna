@@ -14,6 +14,7 @@ from scapy.layers.inet import IP, TCP, UDP
 from scapy.layers.l2 import Ether
 from scapy.packet import Packet, bind_layers
 from scapy.utils import PcapReader, inet_aton
+from scapy.sendrecv import send
 from scipy import stats
 
 
@@ -370,3 +371,17 @@ def plot_histogram_and_cdf(report_plot_file, valid_report_irgs):
         "Histogram and CDF graph can be found here: {}".format(report_plot_file)
     )
     return report_plot_file
+
+def redirect_int_report_to_di(pcap_file, di_ip, tos=0):
+    pcap_reader = PcapReader(pcap_file)
+    while True:
+        try:
+            report_pkt = pcap_reader.read_packet()
+        except EOFError:
+            break
+        except StopIteration:
+            break
+    pkt = report_pkt[IP]
+    pkt.dst = di_ip
+    pkt.tos = tos
+    send(pkt)

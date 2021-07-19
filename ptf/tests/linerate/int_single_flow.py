@@ -8,7 +8,7 @@ from fabric_test import *
 from trex_stl_lib.api import STLPktBuilder, STLStream, STLTXCont
 from trex_test import TRexTest
 from trex_utils import list_port_status
-from xnt import analyze_report_pcap
+from xnt import analyze_report_pcap, redirect_int_report_to_di
 
 TRAFFIC_MULT = "40gbpsl1"
 TEST_DURATION = 10
@@ -72,12 +72,13 @@ class IntSingleFlow(TRexTest, IntTest):
             datetime.now().strftime("%Y%m%d-%H%M%S")
         )
         self.trex_client.stop_capture(capture["id"], output)
-        analyze_report_pcap(output)
+        redirect_int_report_to_di(output, "10.128.13.27")
+        # analyze_report_pcap(output)
         list_port_status(self.trex_client.get_stats())
 
         # TODO: parse data and verify results
 
     def runTest(self):
         # TODO: iterate all possible parameters of test
-        pkt = testutils.simple_udp_packet()
+        pkt = testutils.simple_udp_packet(ip_src="192.168.0.1", ip_dst="192.168.0.2")
         self.doRunTest(TRAFFIC_MULT, pkt, [False, False], False, False, False)
