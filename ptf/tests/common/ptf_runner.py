@@ -500,26 +500,26 @@ def main():
 
         if not args.skip_test:
             info("Running linerate tests...")
-            success = run_test(
-                p4info_path=args.p4info,
-                device_id=args.device_id,
-                grpc_addr=args.grpc_addr,
-                cpu_port=args.cpu_port,
-                ptfdir=args.ptf_dir,
-                port_map_path=args.port_map,
-                platform=args.platform,
-                generate_tv=args.generate_tv,
-                loopback=args.loopback,
-                profile=args.profile,
-                trex_server_addr=args.trex_address,
-                extra_args=unknown_args,
-            )
-            if not success:
-                error("Failed to run linerate tests!")
+            try:
+                success = run_test(
+                    p4info_path=args.p4info,
+                    device_id=args.device_id,
+                    grpc_addr=args.grpc_addr,
+                    cpu_port=args.cpu_port,
+                    ptfdir=args.ptf_dir,
+                    port_map_path=args.port_map,
+                    platform=args.platform,
+                    generate_tv=args.generate_tv,
+                    loopback=args.loopback,
+                    profile=args.profile,
+                    trex_server_addr=args.trex_address,
+                    extra_args=unknown_args,
+                )
+                if not success:
+                    error("Failed to run linerate tests!")
+                    sys.exit(4)
+            finally:
                 trex_daemon_client.stop_trex()
-                sys.exit(4)
-
-        trex_daemon_client.stop_trex()
 
     else:
         info("Running unary test...")
