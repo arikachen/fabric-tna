@@ -114,7 +114,7 @@ public class FabricIntProgrammable extends AbstractFabricHandlerBehavior
     private static final short MIRROR_TYPE_INVALID = 0;
     private static final short MIRROR_TYPE_INT_REPORT = 1;
     private static final short INT_REPORT_TYPE_LOCAL = 1;
-    private static final short INT_REPORT_TYPE_DROP = 2;
+    private static final short INT_REPORT_TYPE_DROP = 4;
     private static final int INT_MIRROR_TRUNCATE_MAX_LEN = 128;
 
     private FlowRuleService flowRuleService;
